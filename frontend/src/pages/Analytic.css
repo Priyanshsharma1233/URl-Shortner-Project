@@ -1,0 +1,138 @@
+.an-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  color: #1b1b2a;
+}
+
+.an-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.an-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.an-code {
+  background: #ece9fe;
+  color: #4936c4;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.an-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.an-card {
+  background: #fff;
+  border: 1px solid #e6e4f0;
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.an-card-label {
+  font-size: 0.8rem;
+  color: #5b5b73;
+}
+
+.an-card-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.an-chart-section {
+  background: #fff;
+  border: 1px solid #e6e4f0;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.an-chart-section h2 {
+  margin: 0 0 16px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.an-chart-wrap {
+  width: 100%;
+}
+
+.an-empty {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #5b5b73;
+  background: #faf9ff;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.an-state {
+  max-width: 760px;
+  margin: 80px auto;
+  text-align: center;
+  color: #5b5b73;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+.an-state-error {
+  color: #c0392b;
+}
+
+@media (max-width: 560px) {
+  .an-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Top bar: back link + logout, added for dashboard integration */
+.an-topbar {
+  max-width: 760px;
+  margin: 0 auto 8px;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.an-back {
+  color: #5b47e0;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.an-back:hover {
+  text-decoration: underline;
+}
+
+.an-logout {
+  padding: 6px 14px;
+  border: 1px solid #e6e4f0;
+  border-radius: 8px;
+  background: #fff;
+  color: #5b5b73;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.an-logout:hover {
+  background: #fdecea;
+  color: #c0392b;
+  border-color: #f3c6c2;
+}
