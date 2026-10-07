@@ -9,21 +9,24 @@ function UrlPage() {
   const [submitting, setSubmitting] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
-    setShortUrl(null);
-    setSubmitting(true);
+ const BASE_URL = import.meta.env.VITE_API_URL;
 
-    try {
-      const data = await shortenUrl(url);
-      setShortUrl(`http://localhost:8080/${data.shortCode}`);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setSubmitting(false);
-    }
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError(null);
+  setShortUrl(null);
+  setSubmitting(true);
+
+  try {
+    const data = await shortenUrl(url);
+    setShortUrl(`${BASE_URL}/${data.shortCode}`);
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   const handleCopy = async () => {
     try {
