@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export async function shortenUrl(url) {
   const res = await fetch(`${BASE_URL}/shorten`, {
@@ -6,10 +6,12 @@ export async function shortenUrl(url) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ url }),
   });
+
   if (!res.ok) {
     const error = await res.json();
     throw new Error(error.message || "Failed to shorten URL");
   }
+
   return res.json();
 }
 
@@ -19,11 +21,13 @@ export async function login(username, password) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
   });
+
   if (!res.ok) {
     const error = await res.json();
     throw new Error(error.message || "Login failed");
   }
-  return res.json(); // { token }
+
+  return res.json();
 }
 
 export async function getAnalytics(shortCode) {
@@ -36,7 +40,6 @@ export async function getAnalytics(shortCode) {
   });
 
   if (res.status === 401) {
-    // token missing/expired — caller should redirect to /login
     throw new Error("UNAUTHORIZED");
   }
 
@@ -45,5 +48,5 @@ export async function getAnalytics(shortCode) {
     throw new Error(error.message || "Failed to load analytics");
   }
 
-  return res.json(); // { shortCode, totalClicks, clicksByDay: [{date, count}] }
+  return res.json();
 }
