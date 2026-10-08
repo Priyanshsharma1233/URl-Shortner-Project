@@ -51,7 +51,13 @@ public class SecurityConfig {
         "http://localhost:5173",
         "https://u-rl-shortner-project.vercel.app"
 ));
-        config.setAllowedMethods(List.of("GET", "POST"));
+        config.allowedMethods(List.of(
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "OPTIONS"
+));
         config.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
