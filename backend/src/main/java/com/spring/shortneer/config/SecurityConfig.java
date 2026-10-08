@@ -4,6 +4,7 @@ import com.spring.shortneer.filter.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,45 +30,77 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
+                // Enable CORS
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+                // Disable CSRF because this is a stateless REST API
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // JWT-based authentication
+                .sessionManagement(sm ->
+                        sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                // Authorization rules
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/shorten", "/{shortCode}", "/api/auth/login").permitAll()
+
+                        // Allow browser CORS preflight requests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // Public endpoints
+                        .requestMatchers(
+                                "/shorten",
+                                "/{shortCode}",
+                                "/api/auth/login"
+                        ).permitAll()
+
+                        // Protected analytics endpoints
                         .requestMatchers("/api/analytics/**").authenticated()
+
+                        // Everything else
                         .anyRequest().permitAll()
                 )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+                // JWT authentication filter
+                .addFilterBefore(
+                        jwtAuthFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
     }
 
-
     @Bean
-public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration config = new CorsConfiguration();
+    public CorsConfigurationSource corsConfigurationSource() {
 
-    config.setAllowedOrigins(List.of(
-            "http://localhost:5173",
-            "https://u-rl-shortner-project.vercel.app"
-    ));
+        CorsConfiguration config = new CorsConfiguration();
 
-    config.setAllowedMethods(List.of(
-            "GET",
-            "POST",
-            "PUT",
-            "DELETE",
-            "OPTIONS"
-    ));
+        // Frontend origins allowed to access this backend
+        config.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "https://u-rl-shortner-project.vercel.app"
+        ));
 
-    config.setAllowedHeaders(List.of("*"));
+        // HTTP methods allowed
+        config.setAllowedMethods(List.of(
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "OPTIONS"
+        ));
 
-    UrlBasedCorsConfigurationSource source =
-            new UrlBasedCorsConfigurationSource();
+        // Allow request headers such as Authorization and Content-Type
+        config.setAllowedHeaders(List.of("*"));
 
-    source.registerCorsConfiguration("/**", config);
+        // Register CORS configuration for all endpoints
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
 
-    return source;
-}
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
+    }
 }
